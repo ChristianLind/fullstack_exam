@@ -1,20 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { AppDispatch, RootState } from '../../store'
 import { useSelector, useDispatch } from 'react-redux'
-import { createProblem, fetchAllProblems } from './problemsSlice'
+//import { createProblem, fetchAllProblems } from './problemsSlice'
 import { ProblemEntity } from './problemEntity'
 import { View, Text, TextInput, StyleSheet, Button, Image } from 'react-native'
 import { Picture } from './picture'
-import * as SecureStore from 'expo-secure-store';
-//import * as ImagePicker from 'expo-image-picker';
-//import { CameraRoll } from "@react-native-camera-roll/camera-roll";
-//import { MediaType } from 'expo-media-library'
 
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useGetProblems, usePostProblem } from './problem-hooks'
 
 
 export function Problems() {
   const token: string | undefined | null = useSelector((state: RootState) => state.users.token)
-  const error: string | undefined = useSelector((state: RootState) => state.users.error)
+  // const error: string | undefined = useSelector((state: RootState) => state.users.error)
   const count = useSelector((state: RootState) => state.counter.value)
   const problems: ProblemEntity[] = useSelector((state: RootState) => state.problems.problems)
   const [camera, setCamera] = useState(false);
@@ -25,11 +23,23 @@ export function Problems() {
 
   const [photoToDisplay, setPhotoToDisplay] = useState('')
 
-  const handleSubmit = (event: any) => {
-    event.preventDefault();
-    console.log(`subject: ${subject}, description: ${description}`);
+  const { isLoading, error, data } = useGetProblems()
+  const queryClient = useQueryClient()
+  const { mutate: createProblem } = usePostProblem()
+  
 
-    dispatch(createProblem(new ProblemEntity(subject, description, photoToDisplay)));
+  // const handleSubmit = (event: any) => {
+  //   event.preventDefault();
+  //   console.log(`subject: ${subject}, description: ${description}`);
+
+  //   dispatch(createProblem(new ProblemEntity(subject, description, photoToDisplay)));
+  // }
+
+  const handleAddProblem = () => {
+    const problemEntity: ProblemEntity = new ProblemEntity(subject, description, photoToDisplay)
+    createProblem(problemEntity, { 
+      onSuccess: () => queryClient.invalidateQueries({ queryKey: ['problems'] }) 
+    })
   }
 
   useEffect(() => {
@@ -41,24 +51,23 @@ export function Problems() {
     <View style={{flex:1}}>
       {camera ? <Picture setCamera={setCamera} setPhotoToDisplay={setPhotoToDisplay}></Picture> : <>
       <Text>When creating a problem, please insert a subject, description, then take a picture and create the problem ticket</Text>
-          <TextInput
-              style={styles.input}
-              onChangeText={setSubject}
-              value={subject}
-              placeholder='Insert subject'
-          />
-          <TextInput
-              style={styles.input}
-              onChangeText={setDescription}
-              value={description}
-              placeholder='Insert description'
-          />
+        <TextInput
+            style={styles.input}
+            onChangeText={setSubject}
+            value={subject}
+            placeholder='Insert subject'
+        />
+        <TextInput
+            style={styles.input}
+            onChangeText={setDescription}
+            value={description}
+            placeholder='Insert description'
+        />
           
         <Button title="Open camera" onPress={() => setCamera(true)}/>
-        <Button title="Create problem" onPress={handleSubmit}/>
+        {/* <Button title="Create problem" onPress={handleSubmit}/> */}
+        <Button title="Add problem" onPress={handleAddProblem}/>
 
-        {/* <Text>token is {token}</Text>
-        <Text>{error}</Text> */}
         
         </>}
 

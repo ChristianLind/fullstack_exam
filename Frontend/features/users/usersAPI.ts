@@ -22,8 +22,12 @@ export class UsersAPI {
 
     static async login(user: UsersLogin) {
         // const result = await axios.post("http://" + this.ip + ':3000/auth/login', user);
-        const result = await axios.post("http://" + this.baseUrl + ':3000/auth/login', user);
-        
-        return result.data;
+        try {
+            const result = await axios.post("http://" + this.baseUrl + ':3000/auth/login', user);
+            return result.data;
+        }
+        catch(error) {
+            console.log("Front - log ", error)
+        }
     }
 }

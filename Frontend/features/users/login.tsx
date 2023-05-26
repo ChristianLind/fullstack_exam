@@ -22,6 +22,7 @@ export function Login({navigation}: {navigation: any}) {
         //payload from backend
         if (response.payload.access_token) {
           navigation.navigate('problems');
+          //navigation.navigate('todos');
         }
       })
       .catch((error) => {
@@ -69,57 +70,56 @@ export function Login({navigation}: {navigation: any}) {
 
 
   return (
-      <View>
-        <Text>Please insert your username</Text>
+    <View>
+      <Text>Please insert your username</Text>
+      <TextInput
+        style={styles.input}
+        onChangeText={setUsername}
+        value={username}
+        placeholder='Insert your username'
+      />
+        <Text>Please insert your password</Text>
         <TextInput
-              style={styles.input}
-              onChangeText={setUsername}
-              value={username}
-              placeholder='Insert your username'
-          />
-          <Text>Please insert your password</Text>
-          <TextInput
-              style={styles.input}
-              onChangeText={setPassword}
-              value={password}
-              placeholder='Insert your password'
-          />
-          <Button title="Login" onPress={handleLoginSuccess}/>
-          <Text style={styles.space}>If login succsefull - your token - {token}</Text>
-          <Text style={styles.space}>{error}</Text>
+          style={styles.input}
+          onChangeText={setPassword}
+          value={password}
+          placeholder='Insert your password'
+        />
+        <Button title="Login" onPress={handleLoginSuccess}/>
+        <Text style={styles.space}>If login succsefull - your token - {token}</Text>
+        <Text style={styles.space}>{error}</Text>
 
-          <Text style={styles.space}>Don't have an account - go to signup Page</Text>
-          <Button title="Go to Signup" onPress={() => navigation.navigate('signup')}/>
+        <Text style={styles.space}>Don't have an account - go to signup Page</Text>
+        <Button title="Go to Signup" onPress={() => navigation.navigate('signup')}/>
 
-          <TouchableOpacity style={[styles.button, styles.space]} onPress={handleLogout}>
-            <Text style={styles.buttonText}>Logout</Text>
-          </TouchableOpacity>
-          
-          <Pressable style={styles.button} onPress={handleShowMyToken}>
-            <Text style={styles.buttonText}>Show My Token</Text>
-          </Pressable>
-
-      </View>
+        <TouchableOpacity style={[styles.button, styles.space]} onPress={handleLogout}>
+          <Text style={styles.buttonText}>Logout</Text>
+        </TouchableOpacity>
+        
+        <Pressable style={styles.button} onPress={handleShowMyToken}>
+          <Text style={styles.buttonText}>Show My Token</Text>
+        </Pressable>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-    input: {
-      height: 40,
-      margin: 12,
-      borderWidth: 1,
-      padding: 10,
-    },
-    space: {
-      marginTop: 20,
-    },
-    button: {
-      backgroundColor: 'blue',
-      padding: 10,
-      borderRadius: 5,
-      marginTop: 20,
-    },
-    buttonText: {
-      color: 'white',
-    },
-  });
+  input: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+  },
+  space: {
+    marginTop: 20,
+  },
+  button: {
+    backgroundColor: 'blue',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 20,
+  },
+  buttonText: {
+    color: 'white',
+  },
+});

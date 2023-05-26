@@ -7,14 +7,15 @@ export class ProblemsAPI {
     static baseUrl: string = Platform.OS === 'ios' ? 'localhost' : '10.0.2.2';
 
     static async create(problem: ProblemEntity) {
+        console.log("create 123")
         try {
             console.log("sending data", problem);
             
             // const result = await axios.post("http://" + this.myIp + ':3000/problems', {
-            const result = await axios.post("http://" + this.baseUrl + ':3000/problems', {
-                data: problem, 
+            const result = await axios.post("http://" + this.baseUrl + ':3000/problems', problem, {
                 headers: { "Content-Type": "multipart/form-data" }
             });
+            console.log("after sending data", problem);
             return result.data;
         }
         catch(error) {

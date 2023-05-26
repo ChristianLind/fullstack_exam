@@ -6,6 +6,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Login } from '../features/users/login';
 import { Signup } from '../features/users/signup';
 import { Problems } from '../features/problems/problems';
+import { Todos } from '../features/todos/todos';
 
 const Stack = createStackNavigator();
 
@@ -16,6 +17,7 @@ export function MyStack () {
                 <Stack.Screen name="login" options={{ title: 'Welcome to Boligfy' }} component={Login}/>
                 <Stack.Screen name="signup" component={Signup}/>
                 <Stack.Screen name="problems" component={Problems}/>
+                <Stack.Screen name="todos" component={Todos}/>
             </Stack.Navigator>
         </NavigationContainer>
     )
